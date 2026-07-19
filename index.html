@@ -1,512 +1,214 @@
-<!--
-SPDX-FileCopyrightText: 2025 Pagefault Games
-SPDX-License-Identifier: AGPL-3.0-only
--->
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-	<meta charset="UTF-8" />
-	<title>PokéRogue</title>
-	<meta name="title" content="PokéRogue" />
-	<meta name="description" content="A Pokémon fangame heavily inspired by the roguelite genre. Battle endlessly while gathering stacking items, exploring many different biomes, and reaching Pokémon stats you never thought possible." />
-	<meta name="theme-color" content="#da3838" />
-	<meta name="keywords" content="pokerogue, pokemon, roguelite" />
-	<meta name="news_keywords" content="pokerogue, pokemon, roguelite" />
-	<meta name="distribution" content="Global">
-	<meta http-equiv="audience" content="General">
-	<meta property="og:title" content="PokéRogue" />
-	<meta property="og:type" content="website" />
-	<meta property="og:description" content="A Pokémon fangame heavily inspired by the roguelite genre. Battle endlessly while gathering stacking items, exploring many different biomes, and reaching Pokémon stats you never thought possible." />
-	<meta property="og:image" content="https://pokerogue.net/logo512.png" />
-	<meta property="og:url" content="https://pokerogue.net" />
-	<meta property="og:site_name" content="PokéRogue" />
-	<meta property="twitter:title" content="PokéRogue" />
-	<meta property="twitter:description" content="A Pokémon fangame heavily inspired by the roguelite genre. Battle endlessly while gathering stacking items, exploring many different biomes, and reaching Pokémon stats you never thought possible." />
-	<meta property="twitter:image" content="https://pokerogue.net/logo512.png" />
-	<meta property="twitter:card" content="summary" />
-	<meta property="twitter:url" content="https://pokerogue.net" />
-	<link rel="apple-touch-icon" href="./logo512.png" />
-	<link rel="shortcut icon" type="image/png" href="./logo512.png" />
-	<link rel="canonical" href="https://pokerogue.net" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-	<style type="text/css">
-		@font-face {
-			font-family: 'emerald';
-			src: url('./fonts/pokemon-emerald-pro.ttf') format('truetype');
-		}
-
-		@font-face {
-			font-family: 'pkmnems';
-			src: url('./fonts/pkmnems.ttf') format('truetype');
-		}
-	</style>
-	<link rel="stylesheet" type="text/css" href="./index.css" />
-	<link rel="manifest" href="./manifest.webmanifest">
-  <script>
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", function () {
-        navigator.serviceWorker.register("./service-worker.js").then(
-          function (registration) {
-            console.log("ServiceWorker registration successful");
-          },
-          function (err) {
-            console.log("ServiceWorker registration failed: ", err);
-          },
-        );
-      });
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PokeRogue Archipelago Fork</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #000;
+      overflow: hidden;
     }
-
-    window.addEventListener('beforeinstallprompt', e => {
-      // Prevent invasive install prompt (users are still able to install as an app)
-      e.preventDefault();
-    });
-  </script>
+    #app {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
 </head>
-
 <body>
-	<div id="app"></div>
-	<div id="touchControls">
-		<div class="left">
-			<div id="control-group-dpad" class="control-group control-group-dpad">
-				<div id="dpad" data-control-key="DPAD">
-					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72">
-						<title>D-Pad Touch Controls</title>
-						<path id="dpadUp" data-key="UP"
-							d="M48,5.8C48,2.5,45.4,0,42,0H29.9C26.6,0,24,2.4,24,5.8V24h24V5.8z" />
-						<path id="dpadRight" data-key="RIGHT"
-							d="M66.2,24H48v24h18.2c3.3,0,5.8-2.7,5.8-6V29.9C72,26.5,69.5,24,66.2,24z" />
-						<path id="dpadDown" data-key="DOWN"
-							d="M24,66.3c0,3.3,2.6,5.7,5.9,5.7H42c3.3,0,6-2.4,6-5.7V48H24V66.3z" />
-						<path id="dpadLeft" data-key="LEFT"
-							d="M5.7,24C2.4,24,0,26.5,0,29.9V42c0,3.3,2.3,6,5.7,6H24V24H5.7z" />
-						<rect id="dpadCenter" x="24" y="24" width="24" height="24" />
-					</svg>
-				</div>
-			</div>
-		</div>
 
-		<div class="right">
-			<div id="control-group-action" class="control-group">
-				<div id="apadAction" class="apad-button apad-circle" data-key="ACTION">
-					<span class="apad-label">A</span>
-				</div>
-			</div>
+  <!-- Core Phaser Game Target Mount -->
+  <div id="app"></div>
 
-			<div id="control-group-cancel" class="control-group">
-				<div id="apadCancel" class="apad-button apad-circle" data-key="CANCEL">
-					<span class="apad-label">B</span>
-				</div>
-			</div>
+  <!-- Primary Game Assembly Script Payload Target -->
+  <script type="module" src="/src/main.ts"></script>
 
-			<div id="control-group-extra-1" class="control-group control-group-extra">
-				<!-- buttons to navigate settings tabs -->
-				<div id="apadPreviousTab" class="apad-button apad-square apad-small" data-key="CYCLE_FORM">
-					<span class="apad-label">F</span>
-				</div>
-				<div id="apadNextTab" class="apad-button apad-square apad-small" data-key="CYCLE_SHINY">
-					<span class="apad-label">R</span>
-				</div>
-				<!-- buttons to open filter menu in starter select -->
-				<div id="apadOpenFilters" class="apad-button apad-rectangle apad-small" data-key="STATS">
-					<span class="apad-label">C</span>
-				</div>
-				<!-- main menu button -->
-				<div id="apadMenu" class="apad-button apad-rectangle apad-small" data-key="MENU">
-					<span class="apad-label">Menu</span>
-				</div>
-			</div>
+  <!-- Native Built-In Archipelago Mod Client (Version 1.4.1) -->
+  <script type="text/javascript">
+  (function() {
+      'use strict';
+      console.log("%c[Archipelago] Initializing native web fork engine...", "color: #00ff00; font-weight: bold;");
 
-			<div id="control-group-extra-2" class="control-group control-group-extra">
-				<!-- buttons to cycle through pokemon characteristics in starter select -->
-				<div id="apadCycleForm" class="apad-button apad-square apad-small" data-key="CYCLE_FORM">
-					<span class="apad-label">F</span>
-				</div>
-				<div id="apadCycleGender" class="apad-button apad-square apad-small" data-key="CYCLE_GENDER">
-					<span class="apad-label">G</span>
-				</div>
-				<div id="apadCycleShiny" class="apad-button apad-square apad-small" data-key="CYCLE_SHINY">
-					<span class="apad-label">R</span>
-				</div>
-				<div id="apadCycleAbility" class="apad-button apad-square apad-small" data-key="CYCLE_ABILITY">
-					<span class="apad-label">E</span>
-				</div>
-				<div id="apadCycleNature" class="apad-button apad-square apad-small" data-key="CYCLE_NATURE">
-					<span class="apad-label">N</span>
-				</div>
-				<div id="apadCycleTera" class="apad-button apad-square apad-small" data-key="CYCLE_TERA">
-					<span class="apad-label">V</span>
-				</div>
-				<!-- buttons to display battle-specific information -->
-				<div id="apadInfo" class="apad-button apad-rectangle apad-small" data-key="CYCLE_TERA">
-					<span class="apad-label">V</span>
-				</div>
-				<div id="apadStats" class="apad-button apad-rectangle apad-small" data-key="STATS">
-					<span class="apad-label">C</span>
-				</div>
-			</div>
+      class PokeRogueArchipelagoMod {
+          constructor() {
+              this.ws = null;
+              this.isConnected = false;
+              this.lastTrackedWave = 0;
+              this.isMenuVisible = true;
+              
+              this.config = {
+                  host: localStorage.getItem('ap_web_host') || "archipelago.gg",
+                  port: localStorage.getItem('ap_web_port') || "38281",
+                  slotName: localStorage.getItem('ap_web_slot') || "pokeroguetest",
+                  password: localStorage.getItem('ap_web_pass') || ""
+              };
+          }
 
-		</div>
-	</div>
-	<script type="module" src="./src/main.ts"></script>
-	<script src="./src/touch-controls.ts" type="module"></script>
-<!-- Native Archipelago Client Mod with Plug-and-Play UI -->
-<script type="text/javascript">
-(function() {
-    console.log("%c[Archipelago] Initializing plug-and-play multiworld client...", "color: #00ff00; font-weight: bold;");
+          onInitialize() { 
+              this.buildFloatingUI();
+              this.setupHotkeys();
+              setInterval(() => this.scanGameProgression(), 1000);
+          }
 
-    class PokeRogueArchipelagoMod {
-        constructor() {
-            this.metadata = { name: "Archipelago Multiworld Sync", version: "1.0.0" };
-            this.ws = null;
-            this.isConnected = false;
-            this.lastTrackedWave = 0;
-            
-            // Load saved connection details or fall back to defaults
-            this.config = {
-                host: localStorage.getItem('ap_host') || "archipelago.gg",
-                port: localStorage.getItem('ap_port') || "38281",
-                slotName: localStorage.getItem('ap_slot') || "Trainer",
-                password: localStorage.getItem('ap_pass') || ""
-            };
-        }
+          buildFloatingUI() {
+              if (document.getElementById('ap-web-login-menu')) return;
 
-        onInitialize() { 
-            console.log(`[Archipelago] Plugin module active! Building user configuration interface...`); 
-            this.buildConnectionMenu();
-            setInterval(() => this.scanGameProgression(), 1000);
-        }
+              const menu = document.createElement('div');
+              menu.id = 'ap-web-login-menu';
+              
+              menu.style.position = 'fixed';
+              menu.style.top = '20px';
+              menu.style.right = '20px';
+              menu.style.width = '260px';
+              menu.style.backgroundColor = '#242430';
+              menu.style.border = '4px solid #4a4a63';
+              menu.style.outline = '2px solid #14141a';
+              menu.style.padding = '14px';
+              menu.style.color = '#fff';
+              menu.style.fontFamily = '"Courier New", Courier, monospace';
+              menu.style.fontSize = '11px';
+              menu.style.fontWeight = 'bold';
+              menu.style.zIndex = '9999999';
+              menu.style.boxShadow = '0px 8px 0px rgba(0,0,0,0.4)';
+              menu.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
 
-        // --- 1. Dynamic User Interface Generation ---
-        buildConnectionMenu() {
-            // Create a floating container box
-            const menu = document.createElement('div');
-            menu.id = 'archipelago-login-menu';
-            menu.style.position = 'absolute';
-            menu.style.top = '10px';
-            menu.style.right = '10px';
-            menu.style.backgroundColor = 'rgba(20, 20, 30, 0.95)';
-            menu.style.border = '2px solid #4a4a6a';
-            menu.style.borderRadius = '6px';
-            menu.style.padding = '12px';
-            menu.style.color = '#fff';
-            menu.style.fontFamily = 'monospace';
-            menu.style.fontSize = '12px';
-            menu.style.zIndex = '99999';
-            menu.style.width = '220px';
-            menu.style.boxShadow = '0px 4px 10px rgba(0,0,0,0.5)';
+              const inputStyle = `
+                  width: 100%; background: #101018; color: #fff; border: 2px solid #303040; 
+                  padding: 4px; font-family: inherit; font-size: 11px; box-sizing: border-box; 
+                  margin-top: 3px; outline: none; border-radius: 0px;
+              `;
 
-            menu.innerHTML = `
-                <div style="font-weight:bold; text-align:center; margin-bottom:8px; color:#00ff00; border-bottom:1px solid #4a4a6a; padding-bottom:4px;">ARCHIPELAGO SYNC</div>
-                <div style="margin-bottom:6px;"><label>Host:<br><input type="text" id="ap_input_host" value="${this.config.host}" style="width:100%; background:#111; color:#fff; border:1px solid #4a4a6a; padding:2px; font-family:monospace;"></label></div>
-                <div style="margin-bottom:6px;"><label>Port:<br><input type="text" id="ap_input_port" value="${this.config.port}" style="width:100%; background:#111; color:#fff; border:1px solid #4a4a6a; padding:2px; font-family:monospace;"></label></div>
-                <div style="margin-bottom:6px;"><label>Slot Name:<br><input type="text" id="ap_input_slot" value="${this.config.slotName}" style="width:100%; background:#111; color:#fff; border:1px solid #4a4a6a; padding:2px; font-family:monospace;"></label></div>
-                <div style="margin-bottom:10px;"><label>Password:<br><input type="password" id="ap_input_pass" value="${this.config.password}" style="width:100%; background:#111; color:#fff; border:1px solid #4a4a6a; padding:2px; font-family:monospace;"></label></div>
-                <button id="ap_connect_btn" style="width:100%; background:#2a6a2a; color:#fff; border:none; padding:6px; cursor:pointer; font-weight:bold; font-family:monospace; border-radius:4px;">CONNECT</button>
-                <div id="ap_status_text" style="text-align:center; margin-top:8px; color:#ff4444; font-weight:bold;">DISCONNECTED</div>
-            `;
+              menu.innerHTML = `
+                  <div style="font-size: 13px; text-align: center; margin-bottom: 12px; color: #f8d030; text-shadow: 2px 2px #403000; letter-spacing: 1px; border-bottom: 2px solid #4a4a63; padding-bottom: 6px;">
+                      ARCHIPELAGO LINK
+                  </div>
+                  <div style="margin-bottom: 8px;"><label>SERVER HOST<br><input type="text" id="ap_web_host" value="${this.config.host}" style="${inputStyle}"></label></div>
+                  <div style="margin-bottom: 8px;"><label>PORT<br><input type="text" id="ap_web_port" value="${this.config.port}" style="${inputStyle}"></label></div>
+                  <div style="margin-bottom: 8px;"><label>SLOT NAME<br><input type="text" id="ap_web_slot" value="${this.config.slotName}" style="${inputStyle}"></label></div>
+                  <div style="margin-bottom: 12px;"><label>ROOM PASSWORD<br><input type="password" id="ap_web_pass" value="${this.config.password}" style="${inputStyle}"></label></div>
+                  
+                  <button id="ap_web_connect_btn" style="
+                      width: 100%; background: #387838; color: #fff; border: 2px solid #58a858; 
+                      border-bottom: 4px solid #184818; padding: 6px; cursor: pointer; 
+                      font-weight: bold; font-family: inherit; font-size: 11px; border-radius: 0px;
+                      text-shadow: 1px 1px #103010;
+                  ">CONNECT TO SEED</button>
+                  
+                  <div id="ap_web_status" style="text-align: center; margin-top: 10px; color: #f05030; font-size: 11px; letter-spacing: 0.5px;">STATUS: DISCONNECTED</div>
+                  <div style="text-align: center; font-size: 9px; color: #8a8aab; margin-top: 6px; font-weight: normal;">PRESS [H] TO HIDE/SHOW MENU</div>
+              `;
 
-            document.body.appendChild(menu);
+              document.body.appendChild(menu);
 
-            // Hook up click handler
-            document.getElementById('ap_connect_btn').addEventListener('click', () => {
-                this.triggerUIConnection();
-            });
-        }
+              const btn = document.getElementById('ap_web_connect_btn');
+              if (btn) {
+                  btn.addEventListener('mouseenter', () => btn.style.background = '#488848');
+                  btn.addEventListener('mouseleave', () => btn.style.background = '#387838');
+                  btn.addEventListener('click', () => this.triggerUIConnection());
+              }
+          }
 
-        triggerUIConnection() {
-            // Grab current input strings
-            this.config.host = document.getElementById('ap_input_host').value.trim();
-            this.config.port = document.getElementById('ap_input_port').value.trim();
-            this.config.slotName = document.getElementById('ap_input_slot').value.trim();
-            this.config.password = document.getElementById('ap_input_pass').value.trim();
+          setupHotkeys() {
+              window.addEventListener('keydown', (event) => {
+                  if (document.activeElement.tagName === 'INPUT') return;
 
-            // Cache inputs locally so they survive page restarts
-            localStorage.setItem('ap_host', this.config.host);
-            localStorage.setItem('ap_port', this.config.port);
-            localStorage.setItem('ap_slot', this.config.slotName);
-            localStorage.setItem('ap_pass', this.config.password);
+                  if (event.key.toLowerCase() === 'h') {
+                      event.preventDefault();
+                      this.isMenuVisible = !this.isMenuVisible;
+                      const menu = document.getElementById('ap-web-login-menu');
+                      if (menu) {
+                          menu.style.opacity = this.isMenuVisible ? '1' : '0';
+                          menu.style.transform = this.isMenuVisible ? 'scale(1)' : 'scale(0.9)';
+                          setTimeout(() => {
+                              menu.style.display = this.isMenuVisible ? 'block' : 'none';
+                          }, 200);
+                      }
+                  }
+              });
+          }
 
-            const statusDiv = document.getElementById('ap_status_text');
-            statusDiv.innerText = "CONNECTING...";
-            statusDiv.style.color = "#ffaa00";
+          triggerUIConnection() {
+              this.config.host = document.getElementById('ap_web_host').value.trim();
+              this.config.port = document.getElementById('ap_web_port').value.trim();
+              this.config.slotName = document.getElementById('ap_web_slot').value.trim();
+              this.config.password = document.getElementById('ap_web_pass').value.trim();
 
-            this.connectToMultiworld();
-        }
+              localStorage.setItem('ap_web_host', this.config.host);
+              localStorage.setItem('ap_web_port', this.config.port);
+              localStorage.setItem('ap_web_slot', this.config.slotName);
+              localStorage.setItem('ap_web_pass', this.config.password);
 
-        // --- 2. WebSocket Network Client Loop ---
-        connectToMultiworld() {
-            if (this.ws) { this.ws.close(); } // Clean up older sockets if active
+              const statusDiv = document.getElementById('ap_web_status');
+              if (statusDiv) {
+                  statusDiv.innerText = "STATUS: INITIALIZING...";
+                  statusDiv.style.color = "#f8d030";
+              }
 
-            const url = `ws://${this.config.host}:${this.config.port}`;
-            this.ws = new WebSocket(url);
+              this.connectToMultiworld();
+          }
 
-            this.ws.onopen = () => {
-                const connectPacket = [{
-                    cmd: "Connect",
-                    game: "PokeRogue",
-                    name: this.config.slotName,
-                    password: this.config.password,
-                    uuid: "pokerogue_embedded_session",
-                    tags: [],
-                    version: { major: 0, minor: 5, build: 0 },
-                    items_handling: 7
-                }];
-                this.ws.send(JSON.stringify(connectPacket));
-            };
+          connectToMultiworld() {
+              if (this.ws) { this.ws.close(); }
 
-            this.ws.onmessage = (event) => {
-                const packets = JSON.parse(event.data);
-                packets.forEach(packet => {
-                    const statusDiv = document.getElementById('ap_status_text');
-                    
-                    if (packet.cmd === "Connected") {
-                        this.isConnected = true;
-                        if (statusDiv) {
-                            statusDiv.innerText = "CONNECTED";
-                            statusDiv.style.color = "#00ff00";
-                        }
-                        console.log(`%c[Archipelago] Sync Established!`, "color: #00ff00; font-weight: bold;");
-                    } else if (packet.cmd === "ReceivedItems") {
-                        packet.items.forEach(item => this.handleIncomingItem(item.item));
-                    } else if (packet.cmd === "ConnectionRefused") {
-                        this.isConnected = false;
-                        if (statusDiv) {
-                            statusDiv.innerText = "REFUSED";
-                            statusDiv.style.color = "#ff4444";
-                        }
-                    }
-                });
-            };
+              const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
+              const url = `${protocol}://${this.config.host}:${this.config.port}`;
+              
+              this.ws = new WebSocket(url);
 
-            this.ws.onclose = () => {
-                this.isConnected = false;
-                const statusDiv = document.getElementById('ap_status_text');
-                if (statusDiv && statusDiv.innerText !== "REFUSED") {
-                    statusDiv.innerText = "DISCONNECTED";
-                    statusDiv.style.color = "#ff4444";
-                }
-            };
-        }
+              this.ws.onopen = () => {
+                  document.getElementById('ap_web_status').innerText = "STATUS: HANDSHAKE...";
+              };
 
-        // --- 3. Scanning Progression ---
-        scanGameProgression() {
-            if (window.phaserGame && window.phaserGame.scene) {
-                const activeScene = window.phaserGame.scene.scenes.find(s => s.currentWave !== undefined);
-                if (activeScene && activeScene.currentWave !== this.lastTrackedWave) {
-                    this.lastTrackedWave = activeScene.currentWave;
-                    this.onWaveChanged(this.lastTrackedWave);
-                }
-            }
-        }
+              this.ws.onmessage = (event) => {
+                  const packets = JSON.parse(event.data);
+                  packets.forEach(packet => {
+                      const statusDiv = document.getElementById('ap_web_status');
+                      
+                      switch(packet.cmd) {
+                          case "RoomInfo":
+                              const connectPacket = [{
+                                  cmd: "Connect", game: "PokeRogue", name: this.config.slotName, password: this.config.password,
+                                  uuid: "pokerogue_web_fork", tags: ["Tracker"], version: { major: 0, minor: 5, build: 0, class: "Version" },
+                                  items_handling: 7
+                              }];
+                              this.ws.send(JSON.stringify(connectPacket));
+                              break;
 
-        onWaveChanged(currentWave) {
-            console.log(`[Archipelago] Wave Intercepted: Wave ${currentWave}`);
-            if (currentWave % 10 === 0) { 
-                const locationId = 80000 + currentWave;
-                this.sendLocationCheck(locationId);
-            }
-        }
+                          case "Connected":
+                              this.isConnected = true;
+                              statusDiv.innerText = "STATUS: CONNECTED";
+                              statusDiv.style.color = "#58a858";
+                              if (packet.slot_data && packet.received_items) {
+                                  packet.received_items.forEach(item => this.handleIncomingItem(item.item));
+                              }
+                              break;
 
-        sendLocationCheck(locationId) {
-            if (!this.isConnected) return;
-            const checkPacket = [{ cmd: "LocationChecks", locations: [locationId] }];
-            this.ws.send(JSON.stringify(checkPacket));
-        }
+                          case "ReceivedItems":
+                              packet.items.forEach(item => this.handleIncomingItem(item.item));
+                              break;
 
-        handleIncomingItem(itemId) {
-            console.log(`[Archipelago] Item Packet Received: ID ${itemId}`);
-        }
-    }
+                          case "ConnectionRefused":
+                              this.isConnected = false;
+                              statusDiv.innerText = `REFUSED`;
+                              statusDiv.style.color = "#f05030";
+                              break;
+                      }
+                  });
+              };
 
-    // Safely fire hook once framework settles
-    setTimeout(() => {
-        const instance = new PokeRogueArchipelagoMod();
-        instance.onInitialize();
-        window.ArchipelagoClientInstance = instance;
-    }, 3000);
-})();
-</script>
-<!-- Native Built-In Archipelago Mod Client -->
-<script type="text/javascript">
-(function() {
-    console.log("%c[Archipelago] Initializing native web fork engine...", "color: #00ff00; font-weight: bold;");
-
-    class PokeRogueArchipelagoMod {
-        constructor() {
-            this.ws = null;
-            this.isConnected = false;
-            this.lastTrackedWave = 0;
-            this.isMenuVisible = true;
-            
-            this.config = {
-                host: localStorage.getItem('ap_web_host') || "archipelago.gg",
-                port: localStorage.getItem('ap_web_port') || "38281",
-                slotName: localStorage.getItem('ap_web_slot') || "pokeroguetest",
-                password: localStorage.getItem('ap_web_pass') || ""
-            };
-        }
-
-        onInitialize() { 
-            this.buildFloatingUI();
-            this.setupHotkeys();
-            setInterval(() => this.scanGameProgression(), 1000);
-        }
-
-        buildFloatingUI() {
-            if (document.getElementById('ap-web-login-menu')) return;
-
-            const menu = document.createElement('div');
-            menu.id = 'ap-web-login-menu';
-            
-            menu.style.position = 'fixed';
-            menu.style.top = '20px';
-            menu.style.right = '20px';
-            menu.style.width = '260px';
-            menu.style.backgroundColor = '#242430';
-            menu.style.border = '4px solid #4a4a63';
-            menu.style.outline = '2px solid #14141a';
-            menu.style.padding = '14px';
-            menu.style.color = '#fff';
-            menu.style.fontFamily = '"Courier New", Courier, monospace';
-            menu.style.fontSize = '11px';
-            menu.style.fontWeight = 'bold';
-            menu.style.zIndex = '9999999';
-            menu.style.boxShadow = '0px 8px 0px rgba(0,0,0,0.4)';
-            menu.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
-
-            const inputStyle = `
-                width: 100%; background: #101018; color: #fff; border: 2px solid #303040; 
-                padding: 4px; font-family: inherit; font-size: 11px; box-sizing: border-box; 
-                margin-top: 3px; outline: none; border-radius: 0px;
-            `;
-
-            menu.innerHTML = `
-                <div style="font-size: 13px; text-align: center; margin-bottom: 12px; color: #f8d030; text-shadow: 2px 2px #403000; letter-spacing: 1px; border-bottom: 2px solid #4a4a63; padding-bottom: 6px;">
-                    ARCHIPELAGO LINK
-                </div>
-                <div style="margin-bottom: 8px;"><label>SERVER HOST<br><input type="text" id="ap_web_host" value="${this.config.host}" style="${inputStyle}"></label></div>
-                <div style="margin-bottom: 8px;"><label>PORT<br><input type="text" id="ap_web_port" value="${this.config.port}" style="${inputStyle}"></label></div>
-                <div style="margin-bottom: 8px;"><label>SLOT NAME<br><input type="text" id="ap_web_slot" value="${this.config.slotName}" style="${inputStyle}"></label></div>
-                <div style="margin-bottom: 12px;"><label>ROOM PASSWORD<br><input type="password" id="ap_web_pass" value="${this.config.password}" style="${inputStyle}"></label></div>
-                
-                <button id="ap_web_connect_btn" style="
-                    width: 100%; background: #387838; color: #fff; border: 2px solid #58a858; 
-                    border-bottom: 4px solid #184818; padding: 6px; cursor: pointer; 
-                    font-weight: bold; font-family: inherit; font-size: 11px; border-radius: 0px;
-                    text-shadow: 1px 1px #103010;
-                ">CONNECT TO SEED</button>
-                
-                <div id="ap_web_status" style="text-align: center; margin-top: 10px; color: #f05030; font-size: 11px; letter-spacing: 0.5px;">STATUS: DISCONNECTED</div>
-                <div style="text-align: center; font-size: 9px; color: #8a8aab; margin-top: 6px; font-weight: normal;">PRESS [H] TO HIDE/SHOW MENU</div>
-            `;
-
-            document.body.appendChild(menu);
-
-            const btn = document.getElementById('ap_web_connect_btn');
-            if (btn) {
-                btn.addEventListener('mouseenter', () => btn.style.background = '#488848');
-                btn.addEventListener('mouseleave', () => btn.style.background = '#387838');
-                btn.addEventListener('click', () => this.triggerUIConnection());
-            }
-        }
-
-        setupHotkeys() {
-            window.addEventListener('keydown', (event) => {
-                if (document.activeElement.tagName === 'INPUT') return;
-
-                if (event.key.toLowerCase() === 'h') {
-                    event.preventDefault();
-                    this.isMenuVisible = !this.isMenuVisible;
-                    const menu = document.getElementById('ap-web-login-menu');
-                    if (menu) {
-                        menu.style.opacity = this.isMenuVisible ? '1' : '0';
-                        menu.style.transform = this.isMenuVisible ? 'scale(1)' : 'scale(0.9)';
-                        setTimeout(() => {
-                            menu.style.display = this.isMenuVisible ? 'block' : 'none';
-                        }, 200);
-                    }
-                }
-            });
-        }
-
-        triggerUIConnection() {
-            this.config.host = document.getElementById('ap_web_host').value.trim();
-            this.config.port = document.getElementById('ap_web_port').value.trim();
-            this.config.slotName = document.getElementById('ap_web_slot').value.trim();
-            this.config.password = document.getElementById('ap_web_pass').value.trim();
-
-            localStorage.setItem('ap_web_host', this.config.host);
-            localStorage.setItem('ap_web_port', this.config.port);
-            localStorage.setItem('ap_web_slot', this.config.slotName);
-            localStorage.setItem('ap_web_pass', this.config.password);
-
-            const statusDiv = document.getElementById('ap_web_status');
-            statusDiv.innerText = "STATUS: INITIALIZING...";
-            statusDiv.style.color = "#f8d030";
-
-            this.connectToMultiworld();
-        }
-
-        connectToMultiworld() {
-            if (this.ws) { this.ws.close(); }
-
-            const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-            const url = `${protocol}://${this.config.host}:${this.config.port}`;
-            
-            this.ws = new WebSocket(url);
-
-            this.ws.onopen = () => {
-                document.getElementById('ap_web_status').innerText = "STATUS: HANDSHAKE...";
-            };
-
-            this.ws.onmessage = (event) => {
-                const packets = JSON.parse(event.data);
-                packets.forEach(packet => {
-                    const statusDiv = document.getElementById('ap_web_status');
-                    
-                    switch(packet.cmd) {
-                        case "RoomInfo":
-                            const connectPacket = [{
-                                cmd: "Connect", game: "PokeRogue", name: this.config.slotName, password: this.config.password,
-                                uuid: "pokerogue_web_fork", tags: ["Tracker"], version: { major: 0, minor: 5, build: 0, class: "Version" },
-                                items_handling: 7
-                            }];
-                            this.ws.send(JSON.stringify(connectPacket));
-                            break;
-
-                        case "Connected":
-                            this.isConnected = true;
-                            statusDiv.innerText = "STATUS: CONNECTED";
-                            statusDiv.style.color = "#58a858";
-                            if (packet.slot_data && packet.received_items) {
-                                packet.received_items.forEach(item => this.handleIncomingItem(item.item));
-                            }
-                            break;
-
-                        case "ReceivedItems":
-                            packet.items.forEach(item => this.handleIncomingItem(item.item));
-                            break;
-
-                        case "ConnectionRefused":
-                            this.isConnected = false;
-                            statusDiv.innerText = `REFUSED`;
-                            statusDiv.style.color = "#f05030";
-                            break;
-                    }
-                });
-            };
-
-            this.ws.onclose = () => {
-                this.isConnected = false;
-                const statusDiv = document.getElementById('ap_web_status');
-                if (statusDiv && !statusDiv.innerText.startsWith("REFUSED")) {
-                    statusDiv.innerText = "STATUS: DISCONNECTED";
-                    statusDiv.style.color = "#f05030";
-                }
-            };
-        }
-
+              this.ws.onclose = () => {
+                  this.isConnected = false;
+                  const statusDiv = document.getElementById('ap_web_status');
+                  if (statusDiv && !statusDiv.innerText.startsWith("REFUSED")) {
+                      statusDiv.innerText = "STATUS: DISCONNECTED";
+                      statusDiv.style.color = "#f05030";
+                  }
+              };
+          }
         scanGameProgression() {
             if (window.phaserGame && window.phaserGame.scene) {
                 const activeScene = window.phaserGame.scene.scenes.find(s => s.currentWave !== undefined);
@@ -519,8 +221,8 @@ SPDX-License-Identifier: AGPL-3.0-only
 
         onWaveChanged(currentWave) {
             console.log(`[Archipelago] Wave detected: ${currentWave}`);
-            const maxGoalWave = 150; 
-            if (currentWave % 10 === 0 && currentWave <= maxGoalWave) { 
+            const maxGoalWave = 150;
+            if (currentWave % 10 === 0 && currentWave <= maxGoalWave) {
                 const locationId = 890000 + currentWave;
                 this.sendLocationCheck(locationId);
                 
@@ -531,7 +233,7 @@ SPDX-License-Identifier: AGPL-3.0-only
             }
         }
 
-               sendLocationCheck(locationId) {
+        sendLocationCheck(locationId) {
             if (!this.isConnected) return;
             console.log(`[Archipelago] Transmitting Location Check ID: ${locationId}`);
             const checkPacket = [{ cmd: "LocationChecks", locations: [locationId] }];
@@ -541,48 +243,42 @@ SPDX-License-Identifier: AGPL-3.0-only
         handleIncomingItem(itemId) {
             console.log(`[Archipelago] Processing item unlock packet: ${itemId}`);
             
-            // Starter Pokémon Unlocks
             if (itemId >= 95000 && itemId <= 95999) {
                 const pokedexId = itemId - 95000;
                 if (window.gameSession?.userData?.starters?.[pokedexId]) {
                     window.gameSession.userData.starters[pokedexId].unlocked = true;
-                    console.log(`[Archipelago] Successfully unlocked Starter compagnon ID: ${pokedexId}`);
                 }
             }
 
-            // Gacha Vouchers and Combat Modifier Core Routing
             switch(itemId) {
-             // --- Egg Voucher Injection Handling ---
-                case 91001: // Regular Egg Voucher
+                case 91001: // Regular Egg Voucher (Type index 1)
                     if (window.gameSession?.userData) {
                         if (!window.gameSession.userData.vouchers) window.gameSession.userData.vouchers = {};
-                        window.gameSession.userData.vouchers[0] = (window.gameSession.userData.vouchers[0] || 0) + 1;
+                        window.gameSession.userData.vouchers["1"] = (window.gameSession.userData.vouchers["1"] || 0) + 1;
                         console.log("[Archipelago] Added 1x Regular Egg Voucher!");
                     }
                     break;
-                case 91005: // Plus Voucher
+                case 91005: // Plus Voucher (Type index 2)
                     if (window.gameSession?.userData) {
                         if (!window.gameSession.userData.vouchers) window.gameSession.userData.vouchers = {};
-                        window.gameSession.userData.vouchers[1] = (window.gameSession.userData.vouchers[1] || 0) + 1;
+                        window.gameSession.userData.vouchers["2"] = (window.gameSession.userData.vouchers["2"] || 0) + 1;
                         console.log("[Archipelago] Added 1x Plus Egg Voucher!");
                     }
                     break;
-                case 91010: // Premium Voucher
+                case 91010: // Premium Voucher (Type index 3)
                     if (window.gameSession?.userData) {
                         if (!window.gameSession.userData.vouchers) window.gameSession.userData.vouchers = {};
-                        window.gameSession.userData.vouchers[2] = (window.gameSession.userData.vouchers[2] || 0) + 1;
+                        window.gameSession.userData.vouchers["3"] = (window.gameSession.userData.vouchers["3"] || 0) + 1;
                         console.log("[Archipelago] Added 1x Premium Egg Voucher!");
                     }
                     break;
-                case 91025: // Gold Voucher
+                case 91025: // Gold Voucher (Type index 4)
                     if (window.gameSession?.userData) {
                         if (!window.gameSession.userData.vouchers) window.gameSession.userData.vouchers = {};
-                        window.gameSession.userData.vouchers[3] = (window.gameSession.userData.vouchers[3] || 0) + 1;
+                        window.gameSession.userData.vouchers["4"] = (window.gameSession.userData.vouchers["4"] || 0) + 1;
                         console.log("[Archipelago] Added 1x Gold Egg Voucher!");
                     }
                     break;
-
-                // --- Battle Modifiers ---
                 case 90001:
                     window.gameSession?.activeBattle?.modifiers?.addModifier("EXP_SHARE");
                     break;
@@ -599,7 +295,3 @@ SPDX-License-Identifier: AGPL-3.0-only
         window.ArchipelagoWebExtension = instance;
     }, 3000);
 })();
-</script>
-
-</body>
-</html>
