@@ -24,6 +24,23 @@
       setInterval(() => this.scanGameProgression(), 1000);
     }
 
+    setupHotkeys() {
+      window.addEventListener('keydown', (event) => {
+        const isInputFocused = document.activeElement && document.activeElement.tagName === 'INPUT';
+        const isToggleHotkey = event.key.toLowerCase() === 'h' || event.code === 'KeyH';
+
+        if (isInputFocused || !isToggleHotkey) return;
+
+        event.preventDefault();
+        this.isMenuVisible = !this.isMenuVisible;
+        const menu = document.getElementById('ap-web-login-menu');
+        if (menu) {
+          menu.classList.toggle('is-hidden', !this.isMenuVisible);
+          menu.setAttribute('aria-hidden', String(!this.isMenuVisible));
+        }
+      });
+    }
+
     buildFloatingUI() {
       if (document.getElementById('ap-web-login-menu')) return;
 
@@ -42,35 +59,41 @@
         <div class="ap-web-login-menu__hint">PRESS [H] TO HIDE/SHOW MENU</div>
       `;
 
-      const gameContainer = document.getElementById('app');
-      if (gameContainer) {
-        gameContainer.appendChild(menu);
-      } else {
-        document.addEventListener('DOMContentLoaded', () => {
-          const fallback = document.getElementById('app');
-          if (fallback) fallback.appendChild(menu);
-        });
+      const mountMenu = (container) => {
+        if (!container || container.contains(menu)) return;
+        container.appendChild(menu);
+      };
+
+      const attachMenu = () => {
+        const gameContainer = document.getElementById('app');
+        if (gameContainer) {
+          mountMenu(gameContainer);
+          return;
+        }
+
+        const body = document.body;
+        if (body) {
+          mountMenu(body);
+        }
+      };
+
+      attachMenu();
+      if (!document.getElementById('ap-web-login-menu')) {
+        let retries = 0;
+        const retryMount = () => {
+          retries += 1;
+          attachMenu();
+          if (!document.getElementById('ap-web-login-menu') && retries < 15) {
+            window.setTimeout(retryMount, 100);
+          }
+        };
+        retryMount();
       }
 
       const connectButton = document.getElementById('ap_web_connect_btn');
       if (connectButton) {
         connectButton.addEventListener('click', () => this.triggerUIConnection());
       }
-    }
-
-    setupHotkeys() {
-      window.addEventListener('keydown', (event) => {
-        if (document.activeElement && document.activeElement.tagName === 'INPUT') return;
-
-        if (event.key.toLowerCase() === 'h') {
-          event.preventDefault();
-          this.isMenuVisible = !this.isMenuVisible;
-          const menu = document.getElementById('ap-web-login-menu');
-          if (menu) {
-            menu.classList.toggle('is-hidden', !this.isMenuVisible);
-          }
-        }
-      });
     }
 
     triggerUIConnection() {
