@@ -78,7 +78,7 @@
               menu.style.boxShadow = '0px 8px 0px rgba(0,0,0,0.4)';
               menu.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
 
-              const inputStyle = `
+                            const inputStyle = `
                   width: 100%; background: #101018; color: #fff; border: 2px solid #303040; 
                   padding: 4px; font-family: inherit; font-size: 11px; box-sizing: border-box; 
                   margin-top: 3px; outline: none; border-radius: 0px;
@@ -104,7 +104,12 @@
                   <div style="text-align: center; font-size: 9px; color: #8a8aab; margin-top: 6px; font-weight: normal;">PRESS [H] TO HIDE/SHOW MENU</div>
               `;
 
-              document.body.appendChild(menu);
+              // SAFE LOADING MOUNT OVERRIDE
+              if (document.body) {
+                  document.body.appendChild(menu);
+              } else {
+                  document.addEventListener('DOMContentLoaded', () => document.body.appendChild(menu));
+              }
 
               const btn = document.getElementById('ap_web_connect_btn');
               if (btn) {
@@ -113,6 +118,7 @@
                   btn.addEventListener('click', () => this.triggerUIConnection());
               }
           }
+
 
           setupHotkeys() {
               window.addEventListener('keydown', (event) => {
