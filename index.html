@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#8c8c8c">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/logo128.png" type="image/png">
   <title>PokeRogue Archipelago Fork</title>
   <style>
     body, html {
@@ -13,297 +16,118 @@
       background-color: #000;
       overflow: hidden;
     }
+
     #app {
       width: 100%;
       height: 100%;
+      position: relative;
+    }
+
+    .ap-web-login-menu {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 260px;
+      background: #242430;
+      border: 4px solid #4a4a63;
+      outline: 2px solid #14141a;
+      padding: 14px;
+      color: #fff;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 11px;
+      font-weight: bold;
+      z-index: 2147483647;
+      box-shadow: 0 8px 0 rgba(0, 0, 0, 0.4);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      pointer-events: auto;
+    }
+
+    .ap-web-login-menu.is-hidden {
+      opacity: 0;
+      transform: scale(0.9);
+      pointer-events: none;
+    }
+
+    .ap-web-login-menu__title {
+      font-size: 13px;
+      text-align: center;
+      margin-bottom: 12px;
+      color: #f8d030;
+      text-shadow: 2px 2px #403000;
+      letter-spacing: 1px;
+      border-bottom: 2px solid #4a4a63;
+      padding-bottom: 6px;
+    }
+
+    .ap-web-login-menu__field {
+      margin-bottom: 8px;
+    }
+
+    .ap-web-login-menu__field--password {
+      margin-bottom: 12px;
+    }
+
+    .ap-web-login-menu__label {
+      display: block;
+    }
+
+    .ap-web-login-menu__input {
+      width: 100%;
+      background: #101018;
+      color: #fff;
+      border: 2px solid #303040;
+      padding: 4px;
+      font-family: inherit;
+      font-size: 11px;
+      box-sizing: border-box;
+      margin-top: 3px;
+      outline: none;
+      border-radius: 0;
+    }
+
+    .ap-web-login-menu__connect {
+      width: 100%;
+      background: #387838;
+      color: #fff;
+      border: 2px solid #58a858;
+      border-bottom: 4px solid #184818;
+      padding: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      font-family: inherit;
+      font-size: 11px;
+      border-radius: 0;
+      text-shadow: 1px 1px #103010;
+    }
+
+    .ap-web-login-menu__connect:hover {
+      background: #488848;
+    }
+
+    .ap-web-login-menu__status {
+      text-align: center;
+      margin-top: 10px;
+      color: #f05030;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+    }
+
+    .ap-web-login-menu__hint {
+      text-align: center;
+      font-size: 9px;
+      color: #8a8aab;
+      margin-top: 6px;
+      font-weight: normal;
     }
   </style>
-  <script type="module" crossorigin src="./assets/index-D5HeVLeI.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/FadeOut-CW2iVO3p.js">
-  <link rel="modulepreload" crossorigin href="./assets/RoundRectangle-DJuPIDen.js">
 </head>
 <body>
 
+  <!-- Core Phaser Game Target Mount -->
   <div id="app"></div>
 
-  <script type="text/javascript">
-  (function() {
-      'use strict';
-      console.log("%c[Archipelago] Initializing native web fork engine...", "color: #00ff00; font-weight: bold;");
+  <!-- Primary Game Assembly Script Payload Target -->
+  <script type="module" src="/assets/index-D5HeVLeI.js"></script>
 
-      class PokeRogueArchipelagoMod {
-          constructor() {
-              this.ws = null;
-              this.isConnected = false;
-              this.lastTrackedWave = 0;
-              this.isMenuVisible = true;
-              
-              this.config = {
-                  host: localStorage.getItem('ap_web_host') || "archipelago.gg",
-                  port: localStorage.getItem('ap_web_port') || "38281",
-                  slotName: localStorage.getItem('ap_web_slot') || "pokeroguetest",
-                  password: localStorage.getItem('ap_web_pass') || ""
-              };
-          }
-
-          onInitialize() { 
-              this.buildFloatingUI();
-              this.setupHotkeys();
-              setInterval(() => this.scanGameProgression(), 1000);
-          }
-
-          buildFloatingUI() {
-              if (document.getElementById('ap-web-login-menu')) return;
-
-              const menu = document.createElement('div');
-              menu.id = 'ap-web-login-menu';
-              
-                          // --- Premium Themed styling parameters matching the pixel aesthetic ---
-            menu.style.position = 'absolute'; // Changed from 'fixed' to 'absolute' to snap inside the game block
-            menu.style.top = '20px';
-            menu.style.right = '20px';
-            menu.style.width = '260px';
-            menu.style.backgroundColor = '#242430';
-            menu.style.border = '4px solid #4a4a63';
-            menu.style.outline = '2px solid #14141a';
-            menu.style.padding = '14px';
-            menu.style.color = '#fff';
-            menu.style.fontFamily = '"Courier New", Courier, monospace';
-            menu.style.fontSize = '11px';
-            menu.style.fontWeight = 'bold';
-            menu.style.zIndex = '2147483647'; // Use the absolute maximum possible browser Z-index override
-            menu.style.boxShadow = '0px 8px 0px rgba(0,0,0,0.4)';
-            menu.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
-            menu.style.pointerEvents = 'auto'; // Forces browser interaction focus over the game canvas below
-
-            const inputStyle = `
-                width: 100%; background: #101018; color: #fff; border: 2px solid #303040; 
-                padding: 4px; font-family: inherit; font-size: 11px; box-sizing: border-box; 
-                margin-top: 3px; outline: none; border-radius: 0px;
-            `;
-
-            menu.innerHTML = `
-                <div style="font-size: 13px; text-align: center; margin-bottom: 12px; color: #f8d030; text-shadow: 2px 2px #403000; letter-spacing: 1px; border-bottom: 2px solid #4a4a63; padding-bottom: 6px;">
-                    ARCHIPELAGO LINK
-                </div>
-                <div style="margin-bottom: 8px;"><label>SERVER HOST<br><input type="text" id="ap_web_host" value="${this.config.host}" style="${inputStyle}"></label></div>
-                <div style="margin-bottom: 8px;"><label>PORT<br><input type="text" id="ap_web_port" value="${this.config.port}" style="${inputStyle}"></label></div>
-                <div style="margin-bottom: 8px;"><label>SLOT NAME<br><input type="text" id="ap_web_slot" value="${this.config.slotName}" style="${inputStyle}"></label></div>
-                <div style="margin-bottom: 12px;"><label>ROOM PASSWORD<br><input type="password" id="ap_web_pass" value="${this.config.password}" style="${inputStyle}"></label></div>
-                
-                <button id="ap_web_connect_btn" style="
-                    width: 100%; background: #387838; color: #fff; border: 2px solid #58a858; 
-                    border-bottom: 4px solid #184818; padding: 6px; cursor: pointer; 
-                    font-weight: bold; font-family: inherit; font-size: 11px; border-radius: 0px;
-                    text-shadow: 1px 1px #103010;
-                ">CONNECT TO SEED</button>
-                
-                <div id="ap_web_status" style="text-align: center; margin-top: 10px; color: #f05030; font-size: 11px; letter-spacing: 0.5px;">STATUS: DISCONNECTED</div>
-                <div style="text-align: center; font-size: 9px; color: #8a8aab; margin-top: 6px; font-weight: normal;">PRESS [H] TO HIDE/SHOW MENU</div>
-            `;
-
-            // --- CRUCIAL MOUNT REPAIR ---
-            // Instead of appending to the loose body, attach directly into Phaser's container mount point
-            const gameContainer = document.getElementById('app');
-            if (gameContainer) {
-                gameContainer.appendChild(menu);
-                console.log("[Archipelago] Successfully mounted menu inside the #app container framework!");
-            } else {
-                // Fail-safe fallback if the game tree initializes out of order
-                document.addEventListener('DOMContentLoaded', () => {
-                    const fallbackContainer = document.getElementById('app');
-                    if (fallbackContainer) fallbackContainer.appendChild(menu);
-                });
-            }
-
-            const connectButton = document.getElementById('ap_web_connect_btn');
-            if (connectButton) {
-                connectButton.addEventListener('click', () => this.triggerUIConnection());
-            }
-
-            return; // keep the floating UI self-contained
-        }
-
-        setupHotkeys() {
-              window.addEventListener('keydown', (event) => {
-                  if (document.activeElement.tagName === 'INPUT') return;
-
-                  if (event.key.toLowerCase() === 'h') {
-                      event.preventDefault();
-                      this.isMenuVisible = !this.isMenuVisible;
-                      const menu = document.getElementById('ap-web-login-menu');
-                      if (menu) {
-                          menu.style.opacity = this.isMenuVisible ? '1' : '0';
-                          menu.style.transform = this.isMenuVisible ? 'scale(1)' : 'scale(0.9)';
-                          setTimeout(() => {
-                              menu.style.display = this.isMenuVisible ? 'block' : 'none';
-                          }, 200);
-                      }
-                  }
-              });
-          }
-
-          triggerUIConnection() {
-              this.config.host = document.getElementById('ap_web_host').value.trim();
-              this.config.port = document.getElementById('ap_web_port').value.trim();
-              this.config.slotName = document.getElementById('ap_web_slot').value.trim();
-              this.config.password = document.getElementById('ap_web_pass').value.trim();
-
-              localStorage.setItem('ap_web_host', this.config.host);
-              localStorage.setItem('ap_web_port', this.config.port);
-              localStorage.setItem('ap_web_slot', this.config.slotName);
-              localStorage.setItem('ap_web_pass', this.config.password);
-
-              const statusDiv = document.getElementById('ap_web_status');
-              if (statusDiv) {
-                  statusDiv.innerText = "STATUS: INITIALIZING...";
-                  statusDiv.style.color = "#f8d030";
-              }
-
-              this.connectToMultiworld();
-          }
-
-          connectToMultiworld() {
-              if (this.ws) { this.ws.close(); }
-
-              const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-              const url = `${protocol}://${this.config.host}:${this.config.port}`;
-              
-              this.ws = new WebSocket(url);
-
-              this.ws.onopen = () => {
-                  document.getElementById('ap_web_status').innerText = "STATUS: HANDSHAKE...";
-              };
-
-              this.ws.onmessage = (event) => {
-                  const packets = JSON.parse(event.data);
-                  packets.forEach(packet => {
-                      const statusDiv = document.getElementById('ap_web_status');
-                      
-                      switch(packet.cmd) {
-                          case "RoomInfo":
-                              const connectPacket = [{
-                                  cmd: "Connect", game: "PokeRogue", name: this.config.slotName, password: this.config.password,
-                                  uuid: "pokerogue_web_fork", tags: ["Tracker"], version: { major: 0, minor: 5, build: 0, class: "Version" },
-                                  items_handling: 7
-                              }];
-                              this.ws.send(JSON.stringify(connectPacket));
-                              break;
-
-                          case "Connected":
-                              this.isConnected = true;
-                              statusDiv.innerText = "STATUS: CONNECTED";
-                              statusDiv.style.color = "#58a858";
-                              if (packet.slot_data && packet.received_items) {
-                                  packet.received_items.forEach(item => this.handleIncomingItem(item.item));
-                              }
-                              break;
-
-                          case "ReceivedItems":
-                              packet.items.forEach(item => this.handleIncomingItem(item.item));
-                              break;
-
-                          case "ConnectionRefused":
-                              this.isConnected = false;
-                              statusDiv.innerText = `REFUSED`;
-                              statusDiv.style.color = "#f05030";
-                              break;
-                      }
-                  });
-              };
-
-              this.ws.onclose = () => {
-                  this.isConnected = false;
-                  const statusDiv = document.getElementById('ap_web_status');
-                  if (statusDiv && !statusDiv.innerText.startsWith("REFUSED")) {
-                      statusDiv.innerText = "STATUS: DISCONNECTED";
-                      statusDiv.style.color = "#f05030";
-                  }
-              };
-          }
-        scanGameProgression() {
-            if (window.phaserGame && window.phaserGame.scene) {
-                const activeScene = window.phaserGame.scene.scenes.find(s => s.currentWave !== undefined);
-                if (activeScene && activeScene.currentWave !== this.lastTrackedWave) {
-                    this.lastTrackedWave = activeScene.currentWave;
-                    this.onWaveChanged(this.lastTrackedWave);
-                }
-            }
-        }
-
-        onWaveChanged(currentWave) {
-            console.log(`[Archipelago] Wave detected: ${currentWave}`);
-            const maxGoalWave = 150;
-            if (currentWave % 10 === 0 && currentWave <= maxGoalWave) {
-                const locationId = 890000 + currentWave;
-                this.sendLocationCheck(locationId);
-                
-                if (currentWave === maxGoalWave) {
-                    const statusPacket = [{ cmd: "StatusUpdate", status: 30 }];
-                    this.ws.send(JSON.stringify(statusPacket));
-                }
-            }
-        }
-
-        sendLocationCheck(locationId) {
-            if (!this.isConnected) return;
-            console.log(`[Archipelago] Transmitting Location Check ID: ${locationId}`);
-            const checkPacket = [{ cmd: "LocationChecks", locations: [locationId] }];
-            this.ws.send(JSON.stringify(checkPacket));
-        }
-
-        handleIncomingItem(itemId) {
-            console.log(`[Archipelago] Processing item unlock packet: ${itemId}`);
-            
-            if (itemId >= 95000 && itemId <= 95999) {
-                const pokedexId = itemId - 95000;
-                if (window.gameSession?.userData?.starters?.[pokedexId]) {
-                    window.gameSession.userData.starters[pokedexId].unlocked = true;
-                }
-            }
-
-            switch(itemId) {
-                case 91001: // Regular Egg Voucher (Type index 1)
-                    if (window.gameSession?.userData) {
-                        if (!window.gameSession.userData.vouchers) window.gameSession.userData.vouchers = {};
-                        window.gameSession.userData.vouchers["1"] = (window.gameSession.userData.vouchers["1"] || 0) + 1;
-                        console.log("[Archipelago] Added 1x Regular Egg Voucher!");
-                    }
-                    break;
-                case 91005: // Plus Voucher (Type index 2)
-                    if (window.gameSession?.userData) {
-                        if (!window.gameSession.userData.vouchers) window.gameSession.userData.vouchers = {};
-                        window.gameSession.userData.vouchers["2"] = (window.gameSession.userData.vouchers["2"] || 0) + 1;
-                        console.log("[Archipelago] Added 1x Plus Egg Voucher!");
-                    }
-                    break;
-                case 91010: // Premium Voucher (Type index 3)
-                    if (window.gameSession?.userData) {
-                        if (!window.gameSession.userData.vouchers) window.gameSession.userData.vouchers = {};
-                        window.gameSession.userData.vouchers["3"] = (window.gameSession.userData.vouchers["3"] || 0) + 1;
-                        console.log("[Archipelago] Added 1x Premium Egg Voucher!");
-                    }
-                    break;
-                case 91025: // Gold Voucher (Type index 4)
-                    if (window.gameSession?.userData) {
-                        if (!window.gameSession.userData.vouchers) window.gameSession.userData.vouchers = {};
-                        window.gameSession.userData.vouchers["4"] = (window.gameSession.userData.vouchers["4"] || 0) + 1;
-                        console.log("[Archipelago] Added 1x Gold Egg Voucher!");
-                    }
-                    break;
-                case 90001:
-                    window.gameSession?.activeBattle?.modifiers?.addModifier("EXP_SHARE");
-                    break;
-                case 90002:
-                    window.gameSession?.activeBattle?.modifiers?.addModifier("SHINY_CHARM");
-                    break;
-            }
-        }
-    }
-
-    setTimeout(() => {
-        const instance = new PokeRogueArchipelagoMod();
-        instance.onInitialize();
-        window.ArchipelagoWebExtension = instance;
-    }, 3000);
-})();
+  <!-- Native Built-In Archipelago Mod Client -->
+  <script defer src="/assets/archipelago-client.js"></script>
