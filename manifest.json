@@ -1,0 +1,16 @@
+{
+  "name": "PokeRogue Archipelago Fork",
+  "short_name": "PokeRogue AP",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#8c8c8c",
+  "orientation": "landscape",
+  "icons": [
+    {
+      "src": "/logo128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    }
+  ]
+}

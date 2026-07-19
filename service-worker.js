@@ -8,6 +8,7 @@ const APP_SHELL = [
   '/',
   '/index.html',
   '/manifest.webmanifest',
+  '/manifest.json',
   '/logo128.png',
   '/logo512.png',
 ];
