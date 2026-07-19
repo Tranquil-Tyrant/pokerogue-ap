@@ -24,12 +24,8 @@
 </head>
 <body>
 
-  <!-- Core Phaser Game Target Mount -->
   <div id="app"></div>
 
-  <!-- Primary Game Assembly Script Payload Target -->
-
-  <!-- Native Built-In Archipelago Mod Client (Version 1.4.1) -->
   <script type="text/javascript">
   (function() {
       'use strict';
@@ -62,65 +58,73 @@
               const menu = document.createElement('div');
               menu.id = 'ap-web-login-menu';
               
-              menu.style.position = 'fixed';
-              menu.style.top = '20px';
-              menu.style.right = '20px';
-              menu.style.width = '260px';
-              menu.style.backgroundColor = '#242430';
-              menu.style.border = '4px solid #4a4a63';
-              menu.style.outline = '2px solid #14141a';
-              menu.style.padding = '14px';
-              menu.style.color = '#fff';
-              menu.style.fontFamily = '"Courier New", Courier, monospace';
-              menu.style.fontSize = '11px';
-              menu.style.fontWeight = 'bold';
-              menu.style.zIndex = '9999999';
-              menu.style.boxShadow = '0px 8px 0px rgba(0,0,0,0.4)';
-              menu.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+                          // --- Premium Themed styling parameters matching the pixel aesthetic ---
+            menu.style.position = 'absolute'; // Changed from 'fixed' to 'absolute' to snap inside the game block
+            menu.style.top = '20px';
+            menu.style.right = '20px';
+            menu.style.width = '260px';
+            menu.style.backgroundColor = '#242430';
+            menu.style.border = '4px solid #4a4a63';
+            menu.style.outline = '2px solid #14141a';
+            menu.style.padding = '14px';
+            menu.style.color = '#fff';
+            menu.style.fontFamily = '"Courier New", Courier, monospace';
+            menu.style.fontSize = '11px';
+            menu.style.fontWeight = 'bold';
+            menu.style.zIndex = '2147483647'; // Use the absolute maximum possible browser Z-index override
+            menu.style.boxShadow = '0px 8px 0px rgba(0,0,0,0.4)';
+            menu.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+            menu.style.pointerEvents = 'auto'; // Forces browser interaction focus over the game canvas below
 
-                            const inputStyle = `
-                  width: 100%; background: #101018; color: #fff; border: 2px solid #303040; 
-                  padding: 4px; font-family: inherit; font-size: 11px; box-sizing: border-box; 
-                  margin-top: 3px; outline: none; border-radius: 0px;
-              `;
+            const inputStyle = `
+                width: 100%; background: #101018; color: #fff; border: 2px solid #303040; 
+                padding: 4px; font-family: inherit; font-size: 11px; box-sizing: border-box; 
+                margin-top: 3px; outline: none; border-radius: 0px;
+            `;
 
-              menu.innerHTML = `
-                  <div style="font-size: 13px; text-align: center; margin-bottom: 12px; color: #f8d030; text-shadow: 2px 2px #403000; letter-spacing: 1px; border-bottom: 2px solid #4a4a63; padding-bottom: 6px;">
-                      ARCHIPELAGO LINK
-                  </div>
-                  <div style="margin-bottom: 8px;"><label>SERVER HOST<br><input type="text" id="ap_web_host" value="${this.config.host}" style="${inputStyle}"></label></div>
-                  <div style="margin-bottom: 8px;"><label>PORT<br><input type="text" id="ap_web_port" value="${this.config.port}" style="${inputStyle}"></label></div>
-                  <div style="margin-bottom: 8px;"><label>SLOT NAME<br><input type="text" id="ap_web_slot" value="${this.config.slotName}" style="${inputStyle}"></label></div>
-                  <div style="margin-bottom: 12px;"><label>ROOM PASSWORD<br><input type="password" id="ap_web_pass" value="${this.config.password}" style="${inputStyle}"></label></div>
-                  
-                  <button id="ap_web_connect_btn" style="
-                      width: 100%; background: #387838; color: #fff; border: 2px solid #58a858; 
-                      border-bottom: 4px solid #184818; padding: 6px; cursor: pointer; 
-                      font-weight: bold; font-family: inherit; font-size: 11px; border-radius: 0px;
-                      text-shadow: 1px 1px #103010;
-                  ">CONNECT TO SEED</button>
-                  
-                  <div id="ap_web_status" style="text-align: center; margin-top: 10px; color: #f05030; font-size: 11px; letter-spacing: 0.5px;">STATUS: DISCONNECTED</div>
-                  <div style="text-align: center; font-size: 9px; color: #8a8aab; margin-top: 6px; font-weight: normal;">PRESS [H] TO HIDE/SHOW MENU</div>
-              `;
+            menu.innerHTML = `
+                <div style="font-size: 13px; text-align: center; margin-bottom: 12px; color: #f8d030; text-shadow: 2px 2px #403000; letter-spacing: 1px; border-bottom: 2px solid #4a4a63; padding-bottom: 6px;">
+                    ARCHIPELAGO LINK
+                </div>
+                <div style="margin-bottom: 8px;"><label>SERVER HOST<br><input type="text" id="ap_web_host" value="${this.config.host}" style="${inputStyle}"></label></div>
+                <div style="margin-bottom: 8px;"><label>PORT<br><input type="text" id="ap_web_port" value="${this.config.port}" style="${inputStyle}"></label></div>
+                <div style="margin-bottom: 8px;"><label>SLOT NAME<br><input type="text" id="ap_web_slot" value="${this.config.slotName}" style="${inputStyle}"></label></div>
+                <div style="margin-bottom: 12px;"><label>ROOM PASSWORD<br><input type="password" id="ap_web_pass" value="${this.config.password}" style="${inputStyle}"></label></div>
+                
+                <button id="ap_web_connect_btn" style="
+                    width: 100%; background: #387838; color: #fff; border: 2px solid #58a858; 
+                    border-bottom: 4px solid #184818; padding: 6px; cursor: pointer; 
+                    font-weight: bold; font-family: inherit; font-size: 11px; border-radius: 0px;
+                    text-shadow: 1px 1px #103010;
+                ">CONNECT TO SEED</button>
+                
+                <div id="ap_web_status" style="text-align: center; margin-top: 10px; color: #f05030; font-size: 11px; letter-spacing: 0.5px;">STATUS: DISCONNECTED</div>
+                <div style="text-align: center; font-size: 9px; color: #8a8aab; margin-top: 6px; font-weight: normal;">PRESS [H] TO HIDE/SHOW MENU</div>
+            `;
 
-              // SAFE LOADING MOUNT OVERRIDE
-              if (document.body) {
-                  document.body.appendChild(menu);
-              } else {
-                  document.addEventListener('DOMContentLoaded', () => document.body.appendChild(menu));
-              }
+            // --- CRUCIAL MOUNT REPAIR ---
+            // Instead of appending to the loose body, attach directly into Phaser's container mount point
+            const gameContainer = document.getElementById('app');
+            if (gameContainer) {
+                gameContainer.appendChild(menu);
+                console.log("[Archipelago] Successfully mounted menu inside the #app container framework!");
+            } else {
+                // Fail-safe fallback if the game tree initializes out of order
+                document.addEventListener('DOMContentLoaded', () => {
+                    const fallbackContainer = document.getElementById('app');
+                    if (fallbackContainer) fallbackContainer.appendChild(menu);
+                });
+            }
 
-              const btn = document.getElementById('ap_web_connect_btn');
-              if (btn) {
-                  btn.addEventListener('mouseenter', () => btn.style.background = '#488848');
-                  btn.addEventListener('mouseleave', () => btn.style.background = '#387838');
-                  btn.addEventListener('click', () => this.triggerUIConnection());
-              }
-          }
+            const connectButton = document.getElementById('ap_web_connect_btn');
+            if (connectButton) {
+                connectButton.addEventListener('click', () => this.triggerUIConnection());
+            }
 
+            return; // keep the floating UI self-contained
+        }
 
-          setupHotkeys() {
+        setupHotkeys() {
               window.addEventListener('keydown', (event) => {
                   if (document.activeElement.tagName === 'INPUT') return;
 
