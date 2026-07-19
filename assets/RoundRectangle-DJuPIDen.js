@@ -1,4 +1,4 @@
-var V=Object.defineProperty;var u=(r,t)=>V(r,"name",{value:t,configurable:!0});import{P as H,R as J}from"./touch-controls-Ch0jkfAd.js";const K=`/*
+var V=Object.defineProperty;var u=(r,t)=>V(r,"name",{value:t,configurable:!0});import{P as H,R as J}from"./FadeOut-CW2iVO3p.js";const K=`/*
  * SPDX-FileCopyrightText: 2024-2025 Pagefault Games
  * SPDX-FileContributor: FlashfyreDev
  * SPDX-FileContributor: SirzBenjie
